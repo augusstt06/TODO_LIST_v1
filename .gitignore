@@ -25,3 +25,5 @@ yarn-error.log*
 .idea
 /.idea
 
+# 환경변수
+.env
