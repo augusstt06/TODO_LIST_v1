@@ -33,7 +33,7 @@ function Main() {
             console.log(r)
             alert('작성이 완료되었습니다!');
             window.location.reload();
-        })
+        }).catch(e => console.log(e))
     }
     const getData = () => {
         axios.get(process.env.REACT_APP_TEST_API)

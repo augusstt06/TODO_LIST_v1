@@ -25,18 +25,19 @@ function Detail(){
         alert('완료여부를 변경하시겠습니까?');
 
         const {name} = e.target;
+
         switch (detail.completed){
             case false:
                 setDetail({
                     ...detail,
                     [name] : true
-                })
+                });
                 break
             case true:
                 setDetail({
                     ...detail,
                     [name] : false
-                })
+                });
                 break
             default:
                 break
@@ -53,8 +54,23 @@ function Detail(){
             [name] : value
         });
     };
+
+    // 저장되어 있는 db 수, 완료 여부 수정,
+    // 아니 시발 왜 이거 404떠 개 좆같은거 씨발!
+    const putTodo = () => {
+        axios.put(`${process.env.REACT_APP_TEST_API}/${detail.id}`, {
+            content   : detail.content,
+            completed : detail.completed,
+            id        : detail.id
+        }).then(r => {
+            console.log(r);
+            alert('Todo의 수정이 완료 되었습니다.');
+            window.location.reload();
+        }).catch(e => console.log(e))
+    }
     console.log(detail)
 
+    // detail ==> content, completed 를 수정하여 put으로 요청
     return(
         <div>
             {fix ?
@@ -67,7 +83,7 @@ function Detail(){
                         {detail.completed ? '완료취소' : '완료'}
                     </button>
                     <button onClick={handleFix}>취소</button>
-                    <button>수정</button>
+                    <button onClick={putTodo}>수정</button>
                 </div>
                 :
                 <div>
