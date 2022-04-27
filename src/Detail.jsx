@@ -4,10 +4,10 @@ import {Link} from "react-router-dom";
 import axios from "axios";
 
 function Detail(){
-    const urlParameter = useParams();
+    const urlParameter        = useParams();
     const [detail, setDetail] = useState('');
 
-    const [fix, setFix] = useState(false);
+    const [fix, setFix]                   = useState(false);
     const [todoComplete, setTodoComplete] = useState(detail.completed);
 
     const getDetail = () => {
@@ -15,10 +15,8 @@ function Detail(){
             .then(r => {
                 setDetail(r.data);
             })
+            .catch(e => console.log(e));
     };
-    useEffect(() => {
-        getDetail();
-    }, []);
 
     const handleTodoComplete = (e) => {
         setTodoComplete(!todoComplete);
@@ -55,35 +53,49 @@ function Detail(){
         });
     };
 
-    // 저장되어 있는 db 수, 완료 여부 수정,
-    // 아니 시발 왜 이거 404떠 개 좆같은거 씨발!
     const putTodo = () => {
         axios.put(`${process.env.REACT_APP_TEST_API}/${detail.id}`, {
             content   : detail.content,
             completed : detail.completed,
             id        : detail.id
         }).then(r => {
-            console.log(r);
             alert('Todo의 수정이 완료 되었습니다.');
+            console.log(r);
             window.location.reload();
-        }).catch(e => console.log(e))
-    }
-    console.log(detail)
 
-    // detail ==> content, completed 를 수정하여 put으로 요청
+        }).catch(e => console.log(e))
+    };
+
+    // 이 컴포넌트는 urlparameter의 id값을 가져올 수 있으므로 parameter를 이용한다.
+    const deleteTodo = (e) => {
+        e.preventDefault();
+        axios.delete(`${process.env.REACT_APP_TEST_API}/${urlParameter.id}`)
+            .then(r => {
+                alert('삭제가 완료되었습니다.');
+                console.log(r);
+                window.location.href = '/';
+            })
+            .catch(e => console.log(e));
+    }
+
+    useEffect(() => {
+        getDetail();
+    }, []);
+
     return(
         <div>
             {fix ?
                 <div>
-                    <input name={'content'}
-                           onChange={changeTodo}
-                           defaultValue={detail.content}/>
-                    <button name='completed'
-                            onClick={handleTodoComplete}>
+                    <input name         = { 'content' }
+                           onChange     = { changeTodo }
+                           defaultValue = { detail.content }/>
+
+                    <button name    = { 'completed' }
+                            onClick = { handleTodoComplete }>
                         {detail.completed ? '완료취소' : '완료'}
                     </button>
-                    <button onClick={handleFix}>취소</button>
-                    <button onClick={putTodo}>수정</button>
+                    <button onClick = { handleFix }>취소</button>
+                    <button onClick = { putTodo }>수정</button>
                 </div>
                 :
                 <div>
@@ -96,13 +108,14 @@ function Detail(){
                         </thead>
                         <tbody>
                         <tr>
-                            <th>{detail.content}</th>
-                            <th>{detail.completed === true ? "완료" : '미완료'}</th>
+                            <th>{ detail.content }</th>
+                            <th>{ detail.completed === true ? "완료" : '미완료' }</th>
                         </tr>
                         </tbody>
                     </table>
-                    <button onClick={handleFix}>수정하기</button>
-                    <Link to = {'/'}>
+                    <button onClick = { handleFix }>수정</button>
+                    <button onClick = { deleteTodo }>삭제</button>
+                    <Link to = { '/' }>
                         <button>메인으로</button>
                     </Link>
                 </div>
