@@ -2,7 +2,11 @@ import React, {useState, useEffect} from "react";
 import {Link} from "react-router-dom";
 import axios from "axios";
 
+
+// GET, POST, DELETE
+
 function Main() {
+    // 각각의 todo의 항목마다 id를 부여
     let now      = new Date();
     const todoId = `${now.getMonth()}${now.getDate()}${now.getHours()}${now.getMinutes()}${now.getSeconds()}`
 
@@ -30,6 +34,7 @@ function Main() {
 
     const [todoList, setTodoList] = useState([]);
 
+    // post request
     const postData = () => {
         axios.post(process.env.REACT_APP_TEST_API, {
             content   : todoData.content,
@@ -42,8 +47,9 @@ function Main() {
         }).catch(e => console.log(e));
     };
 
-    const getData = () => {
-        axios.get(process.env.REACT_APP_TEST_API)
+    // get request
+    const getData = async() => {
+        await axios.get(process.env.REACT_APP_TEST_API)
             .then(r => setTodoList(r.data))
             .catch(e => console.log(e));
     };
@@ -78,6 +84,7 @@ function Main() {
                         />
                 <button onClick = { postData }>입력</button>
             </div>
+
             <div>
                   <br/>
                   <ul>

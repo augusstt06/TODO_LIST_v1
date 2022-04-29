@@ -3,6 +3,9 @@ import {useParams} from "react-router";
 import {Link} from "react-router-dom";
 import axios from "axios";
 
+
+// GET, PUT, DELETE
+
 function Detail(){
     const urlParameter        = useParams();
     const [detail, setDetail] = useState('');
@@ -10,9 +13,11 @@ function Detail(){
     const [fix, setFix]                   = useState(false);
     const [todoComplete, setTodoComplete] = useState(detail.completed);
 
+
     const getDetail = () => {
         axios.get(`${process.env.REACT_APP_TEST_API}/${urlParameter.id}`)
             .then(r => {
+                console.log(r.data,'이거 리스폰스');
                 setDetail(r.data);
             })
             .catch(e => console.log(e));
